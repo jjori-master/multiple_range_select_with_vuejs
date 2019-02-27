@@ -131,6 +131,16 @@
             return this.ranges.filter(function(range) {
               return range.selected;
             });
+          },
+          
+          areas: function() {
+            if (this.selectedRanges.length % 2 === 0) {
+              this.selectedRanges.reduce(function(sum, range, idx) {
+                sum[(idx + 1) / 2] || sum.push([]);
+                sum[(idx + 1) / 2].push(range);
+                return sum;
+              }, []);
+            }
           }
         }
       });
