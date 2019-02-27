@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ko" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style type="text/css">
+      .range-container {
+        padding: 500px;
+        width: 500px;
+      }
+
+      .range_line_wrap {
+        width: 500px;
+        margin-left: 25px;
+      }
+
+      .range_line_wrap span {
+        float: left;
+        display: inline-block;
+        width: 10%;
+        height: 2px;
+        background-color: #b2b2b2;
+        padding: 0;
+        margin: 0;
+      }
+
+      .range_line_wrap span.selected {
+        background: #37adbf;
+      }
+
+      .range {
+        padding: 0;
+        list-style: none;
+        width: 500px;
+      }
+
+      .range li {
+        position: relative;
+        float: left;
+        width: 10%;
+        text-align: center;
+        color: #b2b2b2;
+        font-size: 14px;
+        cursor: pointer;
+      }
+
+      .range li::before {
+        position: absolute;
+        top: -20px;
+        right: 0;
+        left: 0;
+        content: "";
+        margin: 0 auto;
+        width: 9px;
+        height: 9px;
+        background: #b2b2b2;
+        border-radius: 50%;
+      }
+
+      .range .active::before {
+        background: #37adbf;
+      }
+
+      .range .selected::before {
+        width: 18px !important;
+        height: 18px !important;
+
+        margin: -4px 15px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="range-container">
+      <div class="range_line_wrap">
+        <span class="selected"></span> <span></span> <span></span>
+        <span></span> <span></span> <span></span> <span></span> <span></span>
+        <span></span>
+      </div>
+      <ul class="range">
+        <li
+          v-for="(range, index) in ranges"
+          v-text="range.value"
+          :class="{'active': range.active, 'selected': range.selected}"
+          @click="selectedRange(range)"
+        ></li>
+      </ul>
+    </div>
+    <script
+      src="https://unpkg.com/vue@2.6.7/dist/vue.js"
+      charset="utf-8"
+    ></script>
+    <script>
+      var vue = new Vue({
+        el: ".range-container",
+        data: {
+          ranges: [],
+          lastSelectRange: null
+        },
+        methods: {
+          selectedRange: function(range) {
+            if (
+              this.ranges.filter(function(range) {
+                return range.selected;
+              }).length > 6
+            ) {
+              return alert("최대 3개 영역가지 선택 가능합니다.");
+            }
+
+            range.selected = !range.selected;
+            range.active = !range.active;
+          },
+
+          isActiveLine: function(index) {}
+        },
+        created: function() {
+          this.ranges = Array.apply(null, { length: 10 })
+            .map(Function.call, Number)
+            .map(function(value) {
+              return {
+                value: value + 1,
+                selected: false,
+                active: false
+              };
+            });
+
+          this.ranges[0].active = true;
+          this.ranges[0].selected = true;
+        },
+        computed: {
+          selectedRanges: function() {
+            return this.ranges.filter(function(range) {
+              return range.selected;
+            });
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
